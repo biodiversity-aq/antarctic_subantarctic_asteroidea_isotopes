@@ -15,14 +15,14 @@ The raw data is available at Zenodo:
 ```
 .
 ├── README.md 			: description of this repository
-├── SO_isotopes.Rproj	: R Project
-├── data				: directory to store data
+├── SO_isotopes.Rproj	        : R Project
+├── data			: directory to store data
 │   └── processed		: directory to store processed data
-├── html				: HTML of knitted Rmd files
+├── html			: HTML of knitted Rmd files
 │   └── transform-data.html	
-├── renv 				: renv files for dependencies
+├── renv 			: renv files for dependencies
 ├── renv.lock			: describe the state of project's library
-└── transform-data.Rmd	: Rmarkdown file of the code
+└── transform-data.Rmd	        : Rmarkdown file of the code
 ```
 
 ## Getting started
