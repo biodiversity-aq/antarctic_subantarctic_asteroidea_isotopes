@@ -25,6 +25,8 @@ The raw data is available at Zenodo:
 └── transform-data.Rmd	        : Rmarkdown file of the code
 ```
 
+Knitted Rmarkdown can be rendered at https://raw.githack.com/biodiversity-aq/antarctic_subantarctic_asteroidea_isotopes/main/html/transform-data.html
+
 ## Getting started
 
 If dependencies are not automatically installed by `renv` when you open `SO_isotopes.Rproj`, try the following command.
