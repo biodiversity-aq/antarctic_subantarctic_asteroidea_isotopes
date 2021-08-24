@@ -14,8 +14,8 @@ Transform SO isotopes masterfile data into occurrence core and measurement or fa
 
 ```{r}
 # read dataset from url
-data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSfAaU0p3QOsyugCL72TJuHq-pH1XyWGs1A8qIFDp1ndqqehxP4a9Lnc6QGxf1g-qU1abdNHfCwUG7p/pub?gid=193721447&single=true&output=tsv", header = TRUE, sep = "\t", check.names = FALSE)
-
+# quote = "" to escape quotes in associatedOccurrences field
+data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSfAaU0p3QOsyugCL72TJuHq-pH1XyWGs1A8qIFDp1ndqqehxP4a9Lnc6QGxf1g-qU1abdNHfCwUG7p/pub?gid=193721447&single=true&output=tsv", header = TRUE, sep = "\t", allowEscapes = FALSE, quote = "", check.names = FALSE)  
 head(data)
 names(data)
 ```
@@ -25,7 +25,7 @@ names(data)
 Data with fields of [occurrence core](https://rs.gbif.org/core/dwc_occurrence_2020-07-15.xml) is subset from the full dataset. This data frame will be written into `occurrence.txt` file.
 
 ```{r}
-# occurrence data frame spans from column 1-37, all columns beyond that belongs to measurement or fact extension
+# occurrence data frame spans from column 1-38, all columns beyond that belongs to measurement or fact extension
 occ_df <- data[, 1:38]
 head(occ_df)
 ```
@@ -173,6 +173,6 @@ outfile_dir <- here("data/processed")
 occ_file <- file.path(outfile_dir, "occurrence.txt")
 mof_file <- file.path(outfile_dir, "measurementOrFact.txt")
 
-write_tsv(occ_df, occ_file, na = "")
-write_tsv(mof_df, mof_file, na = "")
+write_tsv(occ_df, occ_file, na = "", quote = "none", escape = "none")
+write_tsv(mof_df, mof_file, na = "", quote = "none", escape = "none")
 ```
