@@ -12,6 +12,8 @@ output:
 
 Transform SO isotopes masterfile data into occurrence core and measurement or fact extension.
 
+## Read occurrence sheet
+
 ```{r}
 # read dataset from url
 # quote = "" to escape quotes in associatedOccurrences field
@@ -31,6 +33,10 @@ head(occ_df)
 ```
 
 BOLD IDs are omitted for the moment because it is uncertain which field should be placed under `associatedSequences` or whether [DNA derived data extension](https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2021-07-05.xml) should be used. 
+
+## Read measurementTypes sheet 
+
+To obtain the `measurementType` of each measurement field.
 
 ```{r}
 # read measurementTypes sheet which has definition and unit for each measurmeent header
@@ -164,7 +170,7 @@ dim(mof_df)  # dimension of the mof long table
 head(mof_df)  # preview mof table
 ```
 
-## Write data frames to files.
+## Write data frames to files
 
 ```{r message=FALSE}
 library(here)

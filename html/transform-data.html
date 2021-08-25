@@ -11,7 +11,7 @@
 
 <meta name="author" content="Yi-Ming Gan" />
 
-<meta name="date" content="2021-08-24" />
+<meta name="date" content="2021-08-25" />
 
 <title>R Notebook</title>
 
@@ -1622,12 +1622,14 @@ pre code {
 
 <h1 class="title toc-ignore">R Notebook</h1>
 <h4 class="author">Yi-Ming Gan</h4>
-<h4 class="date">2021-08-24</h4>
+<h4 class="date">2021-08-25</h4>
 
 </div>
 
 
 <p>Transform SO isotopes masterfile data into occurrence core and measurement or fact extension.</p>
+<div id="read-occurrence-sheet" class="section level2">
+<h2>Read occurrence sheet</h2>
 <pre class="r"><code># read dataset from url
 # quote = &quot;&quot; to escape quotes in associatedOccurrences field
 data &lt;- read.csv(&quot;https://docs.google.com/spreadsheets/d/e/2PACX-1vSfAaU0p3QOsyugCL72TJuHq-pH1XyWGs1A8qIFDp1ndqqehxP4a9Lnc6QGxf1g-qU1abdNHfCwUG7p/pub?gid=193721447&amp;single=true&amp;output=tsv&quot;, header = TRUE, sep = &quot;\t&quot;, allowEscapes = FALSE, quote = &quot;&quot;, check.names = FALSE)  
@@ -1668,6 +1670,7 @@ head(data)</code></pre>
 ## [55] &quot;%S_podia&quot;                      &quot;BOLD_ProjectCode&quot;             
 ## [57] &quot;BOLD_ProcessID&quot;                &quot;BOLD_SampleID&quot;                
 ## [59] &quot;BOLD_FieldID&quot;</code></pre>
+</div>
 <div id="create-occurrence-data-frame" class="section level2">
 <h2>Create occurrence data frame</h2>
 <p>Data with fields of <a href="https://rs.gbif.org/core/dwc_occurrence_2020-07-15.xml">occurrence core</a> is subset from the full dataset. This data frame will be written into <code>occurrence.txt</code> file.</p>
@@ -1680,6 +1683,10 @@ head(occ_df)</code></pre>
   </script>
 </div>
 <p>BOLD IDs are omitted for the moment because it is uncertain which field should be placed under <code>associatedSequences</code> or whether <a href="https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2021-07-05.xml">DNA derived data extension</a> should be used.</p>
+</div>
+<div id="read-measurementtypes-sheet" class="section level2">
+<h2>Read measurementTypes sheet</h2>
+<p>To obtain the <code>measurementType</code> of each measurement field.</p>
 <pre class="r"><code># read measurementTypes sheet which has definition and unit for each measurmeent header
 mof_fields &lt;- read.csv(&quot;https://docs.google.com/spreadsheets/d/e/2PACX-1vSfAaU0p3QOsyugCL72TJuHq-pH1XyWGs1A8qIFDp1ndqqehxP4a9Lnc6QGxf1g-qU1abdNHfCwUG7p/pub?gid=1377524164&amp;single=true&amp;output=tsv&quot;, header = TRUE, sep = &quot;\t&quot;, check.names = FALSE)</code></pre>
 </div>
@@ -1792,8 +1799,8 @@ dim(mof_df)  # dimension of the mof long table</code></pre>
   </script>
 </div>
 </div>
-<div id="write-data-frames-to-files." class="section level2">
-<h2>Write data frames to files.</h2>
+<div id="write-data-frames-to-files" class="section level2">
+<h2>Write data frames to files</h2>
 <pre class="r"><code>library(here)
 library(readr)
 outfile_dir &lt;- here(&quot;data/processed&quot;)
