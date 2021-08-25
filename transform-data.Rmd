@@ -15,6 +15,8 @@ Transform SO isotopes masterfile data into occurrence core and measurement or fa
 ## Read occurrence sheet
 
 ```{r}
+# disable scientific notation so that coordinatePrecision of value 0.0001 will not become 1e-4
+options(scipen = 999)
 # read dataset from url
 # quote = "" to escape quotes in associatedOccurrences field
 data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSfAaU0p3QOsyugCL72TJuHq-pH1XyWGs1A8qIFDp1ndqqehxP4a9Lnc6QGxf1g-qU1abdNHfCwUG7p/pub?gid=193721447&single=true&output=tsv", header = TRUE, sep = "\t", allowEscapes = FALSE, quote = "", check.names = FALSE)  
@@ -27,12 +29,15 @@ names(data)
 Data with fields of [occurrence core](https://rs.gbif.org/core/dwc_occurrence_2020-07-15.xml) is subset from the full dataset. This data frame will be written into `occurrence.txt` file.
 
 ```{r}
-# occurrence data frame spans from column 1-38, all columns beyond that belongs to measurement or fact extension
-occ_df <- data[, 1:38]
+# occurrence data frame spans from column 1-39, all columns beyond that belongs to measurement or fact extension
+occ_df <- data[, 1:39]
 head(occ_df)
 ```
 
-BOLD IDs are omitted for the moment because it is uncertain which field should be placed under `associatedSequences` or whether [DNA derived data extension](https://rs.gbif.org/extension/gbif/1.0/dna_derived_data_2021-07-05.xml) should be used. 
+`Paris_MNHN_Number` will be written into occurrence.txt but it is fine because it will not be mapped to Darwin Core field in IPT.
+
+BOLD processID is concatenated with REST API Full Data Retrieval (Specimen + Sequence) url and placed under `associatedOccurrences` field.
+
 
 ## Read measurementTypes sheet 
 
@@ -175,6 +180,8 @@ head(mof_df)  # preview mof table
 ```{r message=FALSE}
 library(here)
 library(readr)
+require(dplyr)    
+
 outfile_dir <- here("data/processed")
 occ_file <- file.path(outfile_dir, "occurrence.txt")
 mof_file <- file.path(outfile_dir, "measurementOrFact.txt")
