@@ -29,8 +29,8 @@ names(data)
 Data with fields of [occurrence core](https://rs.gbif.org/core/dwc_occurrence_2020-07-15.xml) is subset from the full dataset. This data frame will be written into `occurrence.txt` file.
 
 ```{r}
-# occurrence data frame spans from column 1-39, all columns beyond that belongs to measurement or fact extension
-occ_df <- data[, 1:39]
+# occurrence data frame spans from column 1-40, all columns beyond that belongs to measurement or fact extension
+occ_df <- data[, 1:40]
 head(occ_df)
 ```
 
