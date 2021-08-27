@@ -36,7 +36,7 @@ head(occ_df)
 
 `Paris_MNHN_Number` will be written into occurrence.txt but it is fine because it will not be mapped to Darwin Core field in IPT.
 
-BOLD processID is concatenated with REST API Full Data Retrieval (Specimen + Sequence) url and placed under `associatedOccurrences` field.
+BOLD processID is concatenated with [REST API Full Data Retrieval (Specimen + Sequence)](https://v3.boldsystems.org/index.php/resources/api?type=webservices#combined) url and placed under `associatedOccurrences` field.
 
 
 ## Read measurementTypes sheet 
