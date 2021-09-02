@@ -79,7 +79,7 @@ create_var_mof <- function(data = data, mof_fields = mof_fields, core_id = "occu
     occurrenceID = mof[, core_id],
     measurementType = replicate(nrow(mof), measurement_type),
     measurementValue = mof[, measurement_col],
-    measurmentUnit = measurement_unit,
+    measurementUnit = measurement_unit,
     measurementRemarks = measurement_remarks
   )
   return(mof_df)

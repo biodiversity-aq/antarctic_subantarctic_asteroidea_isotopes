@@ -271,7 +271,7 @@ create_var_mof &lt;- function(data = data, mof_fields = mof_fields, core_id = &q
     occurrenceID = mof[, core_id],
     measurementType = replicate(nrow(mof), measurement_type),
     measurementValue = mof[, measurement_col],
-    measurmentUnit = measurement_unit,
+    measurementUnit = measurement_unit,
     measurementRemarks = measurement_remarks
   )
   return(mof_df)
@@ -346,7 +346,7 @@ dim(mof_df)  # dimension of the mof long table</code></pre>
 <pre class="r"><code>head(mof_df)  # preview mof table</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["occurrenceID"],"name":[1],"type":["chr"],"align":["left"]},{"label":["measurementType"],"name":[2],"type":["chr"],"align":["left"]},{"label":["measurementValue"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["measurmentUnit"],"name":[4],"type":["chr"],"align":["left"]},{"label":["measurementRemarks"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"SO_Isotope_1985_2017_0001","2":"Measurement of the arm length (R) in centimeters","3":"1.2","4":"centimeters","5":"","_rn_":"1"},{"1":"SO_Isotope_1985_2017_0002","2":"Measurement of the arm length (R) in centimeters","3":"1.1","4":"centimeters","5":"","_rn_":"2"},{"1":"SO_Isotope_1985_2017_0003","2":"Measurement of the arm length (R) in centimeters","3":"1.2","4":"centimeters","5":"","_rn_":"3"},{"1":"SO_Isotope_1985_2017_0004","2":"Measurement of the arm length (R) in centimeters","3":"1.1","4":"centimeters","5":"","_rn_":"4"},{"1":"SO_Isotope_1985_2017_0005","2":"Measurement of the arm length (R) in centimeters","3":"2.3","4":"centimeters","5":"","_rn_":"5"},{"1":"SO_Isotope_1985_2017_0006","2":"Measurement of the arm length (R) in centimeters","3":"0.6","4":"centimeters","5":"","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["occurrenceID"],"name":[1],"type":["chr"],"align":["left"]},{"label":["measurementType"],"name":[2],"type":["chr"],"align":["left"]},{"label":["measurementValue"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["measurementUnit"],"name":[4],"type":["chr"],"align":["left"]},{"label":["measurementRemarks"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"SO_Isotope_1985_2017_0001","2":"Measurement of the arm length (R) in centimeters","3":"1.2","4":"centimeters","5":"","_rn_":"1"},{"1":"SO_Isotope_1985_2017_0002","2":"Measurement of the arm length (R) in centimeters","3":"1.1","4":"centimeters","5":"","_rn_":"2"},{"1":"SO_Isotope_1985_2017_0003","2":"Measurement of the arm length (R) in centimeters","3":"1.2","4":"centimeters","5":"","_rn_":"3"},{"1":"SO_Isotope_1985_2017_0004","2":"Measurement of the arm length (R) in centimeters","3":"1.1","4":"centimeters","5":"","_rn_":"4"},{"1":"SO_Isotope_1985_2017_0005","2":"Measurement of the arm length (R) in centimeters","3":"2.3","4":"centimeters","5":"","_rn_":"5"},{"1":"SO_Isotope_1985_2017_0006","2":"Measurement of the arm length (R) in centimeters","3":"0.6","4":"centimeters","5":"","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
