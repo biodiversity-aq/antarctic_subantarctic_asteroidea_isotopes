@@ -10,6 +10,14 @@ The raw data is available at Zenodo:
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5041318.svg)](https://doi.org/10.5281/zenodo.5041318)
 
+Darwin Core formatted of this dataset is published in the portals below. 
+
+portal | link
+:-- | :--
+IPT | https://ipt.biodiversity.aq/resource?r=antarctic_subantarctic_asteroidea_isotopes
+GBIF | https://www.gbif.org/dataset/ff3984d7-84bd-4f3a-b843-666faa4c1696
+OBIS | https://obis.org/dataset/c6b9cd54-3c38-4054-b5e6-d331414d5899
+
 ## Repo structure
 
 ```
@@ -22,7 +30,8 @@ The raw data is available at Zenodo:
 │   └── transform-data.html	
 ├── renv 			: renv files for dependencies
 ├── renv.lock			: describe the state of project's library
-└── transform-data.Rmd	        : Rmarkdown file of the code
+└── src
+│   └── transform-data.Rmd	       : Rmarkdown file of the code
 ```
 
 Knitted Rmarkdown can be rendered at https://raw.githack.com/biodiversity-aq/antarctic_subantarctic_asteroidea_isotopes/main/html/transform-data.html
