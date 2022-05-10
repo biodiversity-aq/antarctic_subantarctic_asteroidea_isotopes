@@ -31,7 +31,7 @@ OBIS | https://obis.org/dataset/c6b9cd54-3c38-4054-b5e6-d331414d5899
 ├── renv 			: renv files for dependencies
 ├── renv.lock			: describe the state of project's library
 └── src
-│   └── transform-data.Rmd	       : Rmarkdown file of the code
+    └── transform-data.Rmd	       : Rmarkdown file of the code
 ```
 
 Knitted Rmarkdown can be rendered at https://raw.githack.com/biodiversity-aq/antarctic_subantarctic_asteroidea_isotopes/main/html/transform-data.html
