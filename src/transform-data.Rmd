@@ -1,0 +1,191 @@
+---
+title: "R Notebook"
+author: "Yi-Ming Gan"
+date: "`r Sys.Date()`"
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "html") })
+output:
+  html_document:
+    df_print: paged
+    
+---
+
+Transform SO isotopes masterfile data into occurrence core and measurement or fact extension.
+
+## Read occurrence sheet
+
+```{r}
+# disable scientific notation so that coordinatePrecision of value 0.0001 will not become 1e-4
+options(scipen = 999)
+# read dataset from url
+# quote = "" to escape quotes in associatedOccurrences field
+data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSfAaU0p3QOsyugCL72TJuHq-pH1XyWGs1A8qIFDp1ndqqehxP4a9Lnc6QGxf1g-qU1abdNHfCwUG7p/pub?gid=193721447&single=true&output=tsv", header = TRUE, sep = "\t", allowEscapes = FALSE, quote = "", check.names = FALSE)  
+head(data)
+names(data)
+```
+
+## Create occurrence data frame
+
+Data with fields of [occurrence core](https://rs.gbif.org/core/dwc_occurrence_2020-07-15.xml) is subset from the full dataset. This data frame will be written into `occurrence.txt` file.
+
+```{r}
+# occurrence data frame spans from column 1-41, all columns beyond that belongs to measurement or fact extension
+occ_df <- data[, 1:41]
+head(occ_df)
+```
+
+`Paris_MNHN_Number` will be written into occurrence.txt but it is fine because it will not be mapped to Darwin Core field in IPT.
+
+BOLD processID is concatenated with [REST API Full Data Retrieval (Specimen + Sequence)](https://v3.boldsystems.org/index.php/resources/api?type=webservices#combined) url and placed under `associatedOccurrences` field.
+
+
+## Read measurementTypes sheet 
+
+To obtain the `measurementType` of each measurement field.
+
+```{r}
+# read measurementTypes sheet which has definition and unit for each measurmeent header
+mof_fields <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSfAaU0p3QOsyugCL72TJuHq-pH1XyWGs1A8qIFDp1ndqqehxP4a9Lnc6QGxf1g-qU1abdNHfCwUG7p/pub?gid=1377524164&single=true&output=tsv", header = TRUE, sep = "\t", check.names = FALSE)
+```
+
+## Simple function to subset a measurementType from wide table into long measurement or fact table
+
+```{r message=FALSE}
+library(tidyverse)
+
+#' Function to subset a measurementType from wide table to long measurement or fact table
+#'
+#' @param data The data frame which contains measurement data in wide format.
+#' @param mof_fields The data frame which contains measurement columnName of `data`, measurementType and measurementUnit
+#' @param core_id A string which is the field name of the (occurrence) core ID.
+#' @param measurement_col A string which is the field name of data frame that contains the measurement value. Will be used to populate the measurementValue field.
+#' @param measurement_remarks A string of measurement remark. Will be used to populate measurementRemarks field.
+#
+
+create_var_mof <- function(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col, measurement_remarks = "") {
+  # create a measurement or fact table of a single measurement type from the data
+  # subset from full dataset
+  mof <- data %>% 
+    # remove rows of measurement which are NULL
+    filter(!is.na(!!as.symbol(measurement_col))) %>%  # !!as.symbol is required as column name is passed as string
+    select(!!as.symbol(core_id), !!as.symbol(measurement_col))
+  
+  # pull measurementType and measuremntUnit from measurmentTypes sheet based on the column name
+  measurement_type <- mof_fields %>% filter(columnName == measurement_col) %>% pull(measurementType)
+  measurement_unit <- mof_fields %>% filter(columnName == measurement_col) %>% pull(measurementUnit)
+  
+  # create mof table (long table)
+  mof_df <- data.frame(
+    occurrenceID = mof[, core_id],
+    measurementType = replicate(nrow(mof), measurement_type),
+    measurementValue = mof[, measurement_col],
+    measurementUnit = measurement_unit,
+    measurementRemarks = measurement_remarks
+  )
+  return(mof_df)
+}
+```
+
+
+## Subsets of different measurements
+
+Arm length, disc radius and arm to disc ratio
+
+```{r}
+armLength <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "Arm_length_R_(cm)", measurement_remarks = "")
+discRadius <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "Disc_radius_r_(cm)", measurement_remarks = "")
+rRRatio <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "R_r_ratio", measurement_remarks = "")
+```
+
+
+Delta C13, N15, S34 of tegument and podia
+
+```{r}
+# d13C
+
+d13C_tegument <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "d13C_tegument", measurement_remarks = "tegument")
+d13C_podia<- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "d13C_podia", measurement_remarks = "podia")
+
+# d15N
+
+d15N_tegument <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "d15N_tegument", measurement_remarks = "tegument")
+d15N_podia <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "d15N_podia", measurement_remarks = "podia")
+
+# d34S
+
+d34S_tegument <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "d34S_tegument", measurement_remarks = "tegument")
+d34S_podia <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "d34S_podia", measurement_remarks = "podia")
+
+```
+
+%C, %N, %S of tegument and podia
+
+```{r}
+# %C
+
+percentage_C_tegument <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "%C_tegument", measurement_remarks = "tegument")
+percentage_C_podia <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "%C_podia", measurement_remarks = "podia")
+
+# %N 
+
+percentage_N_tegument <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "%N_tegument", measurement_remarks = "tegument")
+percentage_N_podia <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "%N_podia", measurement_remarks = "podia")
+
+
+# %S
+
+percentage_S_tegument <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "%S_tegument",  measurement_remarks = "tegument")
+percentage_S_podia <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "%S_podia", measurement_remarks = "podia")
+```
+
+C/N ratio of tegument and podia
+
+```{r}
+ratio_CN_tegument <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "C/N_tegument", measurement_remarks = "tegument")
+ratio_CN_podia <- create_var_mof(data = data, mof_fields = mof_fields, core_id = "occurrenceID", measurement_col = "C/N_podia", measurement_remarks = "podia")
+```
+
+
+## Create measurement or fact data frame
+
+Bind each subset together to form measurement or fact data frame.
+
+```{r}
+mof_df <- rbind(
+  armLength,
+  discRadius,
+  rRRatio,
+  d13C_tegument,
+  d13C_podia,
+  d15N_tegument,
+  d15N_podia,
+  d34S_tegument,
+  d34S_podia,
+  percentage_C_tegument,
+  percentage_C_podia,
+  percentage_N_tegument,
+  percentage_N_podia,
+  percentage_S_tegument,
+  percentage_S_podia,
+  ratio_CN_tegument,
+  ratio_CN_podia
+)
+
+dim(mof_df)  # dimension of the mof long table
+head(mof_df)  # preview mof table
+```
+
+## Write data frames to files
+
+```{r message=FALSE}
+library(here)
+library(readr)
+require(dplyr)    
+
+outfile_dir <- here("data/processed")
+occ_file <- file.path(outfile_dir, "occurrence.txt")
+mof_file <- file.path(outfile_dir, "measurementOrFact.txt")
+
+write_tsv(occ_df, occ_file, na = "", quote = "none", escape = "none")
+write_tsv(mof_df, mof_file, na = "", quote = "none", escape = "none")
+```
